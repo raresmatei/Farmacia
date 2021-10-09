@@ -35,9 +35,34 @@ public class Main {
                             System.out.println(resultSet.getString("name"));
                         }
                         break;
-                        
+
+                    case 2:
+                        int nrOrdersDonaAugust = 0;
+                        int sumDonaAugust = 0;
+                        int orderAvgDonaAugust = 0;
+
+                        resultSet = statement.executeQuery("SELECT count(*) as countOrders from pharmacy left join orders on pharmacy.id = orders.pharmacy_id where pharmacy.name = 'dona'\n" +
+                                "                                                                              and EXTRACT(MONTH FROM orders.delivery_date) = 8");
+                        resultSet.next();
+                        System.out.println("Numar de comenzi august farmacia dona: " + resultSet.getInt("countOrders"));
+
+                        resultSet = statement.executeQuery("SELECT sum(order_item.quantity * m.price) as sumAugust from pharmacy left join orders on pharmacy.id = orders.pharmacy_id left join order_item on orders.id = order_item.order_id\n" +
+                                "    left join medicines m on order_item.medicine_id = m.id\n" +
+                                "     where pharmacy.name = 'dona' and EXTRACT(MONTH FROM orders.delivery_date) = 8");
+                        resultSet.next();
+                        System.out.println("Incasari august farmacia dona: " + resultSet.getInt("sumAugust"));
+
+                        resultSet = statement.executeQuery("SELECT avg(order_item.quantity * m.price) as avgAugust from pharmacy left join orders on pharmacy.id = orders.pharmacy_id left join order_item on orders.id = order_item.order_id\n" +
+                                "    left join medicines m on order_item.medicine_id = m.id\n" +
+                                "     where pharmacy.name = 'dona' and EXTRACT(MONTH FROM orders.delivery_date) = 8");
+                        resultSet.next();
+                        System.out.println("Incasari august farmacia dona: " + resultSet.getFloat("avgAugust"));
+
+                        break;
+
                     case 7:
                         System.out.println("Iesire program");
+                        break;
                     default:
                         System.out.println("Optiune invalida");
                         break;
